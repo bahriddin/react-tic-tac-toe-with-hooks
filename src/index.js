@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
 function Square(props) {
-  return <button className="square">{/* TODO */}</button>;
+  const [value, setValue] = useState(null);
+  const handleClick = () => setValue("X");
+  return (
+    <button className="square" onClick={handleClick}>
+      {value}
+    </button>
+  );
 }
 
 function Board(props) {
   function renderSquare(i) {
-    return <Square />;
+    return <Square value={i} />;
   }
 
   const status = "Next player: X";
