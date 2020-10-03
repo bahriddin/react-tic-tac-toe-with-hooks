@@ -15,6 +15,24 @@ function Status({ winner, activePlayer }) {
   return <div className="status">{status}</div>;
 }
 
+function MoveList({ history, onClick }) {
+  const renderMove = (step, move) => {
+    const desc = move ? `Go to move #${move}` : "Go to game start";
+    return (
+      <li key={move}>
+        <button
+          onClick={() => {
+            onClick(move);
+          }}
+        >
+          {desc}
+        </button>
+      </li>
+    );
+  };
+  return <ol>{history.map(renderMove)}</ol>;
+}
+
 function Board(props) {
   const renderSquare = (i) => {
     return <Square value={props.squares[i]} onClick={() => props.onClick(i)} />;
@@ -22,10 +40,6 @@ function Board(props) {
 
   return (
     <div>
-      <Status
-        winner={calculateWinner(props.squares)}
-        activePlayer={props.xIsNext ? "X" : "O"}
-      />
       <div className="board-row">
         {renderSquare(0)}
         {renderSquare(1)}
@@ -48,30 +62,38 @@ function Board(props) {
 function Game(props) {
   const [history, setHistory] = useState([{ squares: Array(9).fill(null) }]);
   const [xIsNext, setXIsNext] = useState(true);
-  const current = history[history.length - 1];
+  const [stepNumber, setStepNumber] = useState(0);
+
+  const current = history[stepNumber];
+  const winner = calculateWinner(current.squares);
 
   const handleClick = (i) => {
-    if (calculateWinner(current.squares) || current.squares[i]) {
+    const newHistory = history.slice(0, stepNumber + 1);
+    const newCurrent = newHistory[newHistory.length - 1];
+    if (calculateWinner(newCurrent.squares) || newCurrent.squares[i]) {
       return;
     }
-    const newSquares = current.squares.slice();
+    const newSquares = newCurrent.squares.slice();
     newSquares[i] = xIsNext ? "X" : "O";
-    setHistory(history.concat([{ squares: newSquares }]));
+
+    setHistory(newHistory.concat([{ squares: newSquares }]));
+    setStepNumber(newHistory.length);
     setXIsNext(!xIsNext);
+  };
+
+  const jumpTo = (step) => {
+    setStepNumber(step);
+    setXIsNext(step % 2 === 0);
   };
 
   return (
     <div className="game">
       <div className="game-board">
-        <Board
-          squares={current.squares}
-          onClick={(i) => handleClick(i)}
-          xIsNext={xIsNext}
-        />
+        <Board squares={current.squares} onClick={(i) => handleClick(i)} />
       </div>
       <div className="game-info">
-        <div>{/* status */}</div>
-        <ol>{/* TODO */}</ol>
+        <Status winner={winner} activePlayer={xIsNext ? "X" : "O"} />
+        <MoveList history={history} onClick={(step) => jumpTo(step)} />
       </div>
     </div>
   );
