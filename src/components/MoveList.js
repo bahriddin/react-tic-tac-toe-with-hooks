@@ -1,16 +1,16 @@
 import React from "react";
 
-export default function MovesHistory({ history, onClick }) {
+export default function MoveList({ history, onClick }) {
   return (
     <ol>
       {history.map((step, move) => (
-        <Step move={move} key={move} onClick={() => onClick(move)} />
+        <Move move={move} key={move} onClick={() => onClick(move)} />
       ))}
     </ol>
   );
 }
 
-function Step({ move, onClick }) {
+function Move({ move, onClick }) {
   const description = move ? `Go to move #${move}` : "Go to game start";
   return (
     <li>

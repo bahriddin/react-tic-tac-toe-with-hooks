@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import { calculateWinner } from "./utils";
 
-import MovesHistory from "./components/MovesHistory";
+import MoveList from "./components/MoveList";
 import Status from "./components/Status";
 import Board from "./components/Board";
 
@@ -43,7 +43,7 @@ function Game(props) {
           winner={calculateWinner(current.squares)}
           activePlayer={xIsNext ? "X" : "O"}
         />
-        <MovesHistory history={history} onClick={(step) => jumpTo(step)} />
+        <MoveList history={history} onClick={(step) => jumpTo(step)} />
       </div>
     </div>
   );
