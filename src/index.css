@@ -1,3 +1,4 @@
+/* task-1 is done */
 body {
   font: 14px "Century Gothic", Futura, sans-serif;
   margin: 20px;
@@ -6,7 +7,7 @@ body {
 
 ol,
 ul {
-  padding-left: 30px;
+  padding-left: 30px !important;
 }
 
 .board-row:after {
